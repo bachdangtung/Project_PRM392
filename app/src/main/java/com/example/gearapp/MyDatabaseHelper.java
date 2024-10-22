@@ -81,6 +81,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //table Message
     private static final String TABLE_MESSAGE = "message";
+    private static final String COLUMN_MESSAGE_SUCCESS = "success";
     private static final String COLUMN_MESSAGE_MESSAGE = "message";
     private static final String COLUMN_MESSAGE_NAME = "name";
 
@@ -172,6 +173,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         //tao bang message
         String createMessageTable = "CREATE TABLE " + TABLE_MESSAGE + " (" +
+                COLUMN_MESSAGE_SUCCESS + " INTEGER, " +
                 COLUMN_MESSAGE_MESSAGE + " TEXT, " +
                 COLUMN_MESSAGE_NAME + " TEXT);";
         db.execSQL(createMessageTable);
@@ -324,10 +326,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Thêm tin nhắn vào bảng message
-    void addMessage(String message, String name) {
+    void addMessage(String message, String name, boolean success) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
+        cv.put(COLUMN_MESSAGE_SUCCESS, success ? 1 : 0);
         cv.put(COLUMN_MESSAGE_MESSAGE, message);
         cv.put(COLUMN_MESSAGE_NAME, name);
         long result = db.insert(TABLE_MESSAGE, null, cv);
