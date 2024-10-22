@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.gearapp.R;
-import com.example.gearapp.adapter.LoaiSpAdapter;
-import com.example.gearapp.model.LoaiSp;
+import com.example.gearapp.adapter.CategoryAdapter;
+import com.example.gearapp.model.Category;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     ListView listViewManHinhChinh;
     DrawerLayout drawerLayout;
-    LoaiSpAdapter loaiSpAdapter;
-    List<LoaiSp> mangloaisp;
+    CategoryAdapter categoryAdapter;
+    List<Category> mangloaisp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         //khoi tao list
         mangloaisp = new ArrayList<>();
         //khoi tao adapter
-        loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(),mangloaisp);
-        listViewManHinhChinh.setAdapter(loaiSpAdapter);
+        categoryAdapter = new CategoryAdapter(getApplicationContext(),mangloaisp);
+        listViewManHinhChinh.setAdapter(categoryAdapter);
     }
 }
