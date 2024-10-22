@@ -1,6 +1,6 @@
 package com.example.gearapp.model;
 
-public class LoaiSp {
+public class Category {
     int id;
     String name;
     String image;

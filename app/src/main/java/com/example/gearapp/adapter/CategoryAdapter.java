@@ -10,16 +10,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.gearapp.R;
-import com.example.gearapp.model.LoaiSp;
+import com.example.gearapp.model.Category;
 
 import java.util.List;
 
-public class LoaiSpAdapter extends BaseAdapter {
+public class CategoryAdapter extends BaseAdapter {
 
-    List<LoaiSp> array;
+    List<Category> array;
     Context context;
 
-    public LoaiSpAdapter( Context context, List<LoaiSp> array) {
+    public CategoryAdapter(Context context, List<Category> array) {
         this.array = array;
         this.context = context;
     }
@@ -40,7 +40,7 @@ public class LoaiSpAdapter extends BaseAdapter {
     }
 
     public class ViewHolder{
-        TextView texttensp;
+        TextView text_nameproduct;
         ImageView imgimage;
     }
 
@@ -51,12 +51,12 @@ public class LoaiSpAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.item_sanpham, null);
-            viewHolder.texttensp = view.findViewById(R.id.item_tensp);
+            viewHolder.text_nameproduct = view.findViewById(R.id.item_nameproduct);
             viewHolder.imgimage = view.findViewById(R.id.item_image);
             view.setTag(viewHolder);
         }else  {
             viewHolder = (ViewHolder) view.getTag();
-            viewHolder.texttensp.setText(array.get(i).getName());
+            viewHolder.text_nameproduct.setText(array.get(i).getName());
             Glide.with(context).load(array.get(i).getImage()).into(viewHolder.imgimage);
         }
         return view;
