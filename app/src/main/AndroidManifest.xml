@@ -13,16 +13,25 @@
         android:theme="@style/Theme.GearApp"
         tools:targetApi="31">
         <activity
-            android:name=".ThanhToanActivity"
+            android:name=".activity.RegiterActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MainActivity"
-            android:exported="true">
+            android:name=".activity.LoginActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ThanhToanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true">
+
         </activity>
     </application>
 
