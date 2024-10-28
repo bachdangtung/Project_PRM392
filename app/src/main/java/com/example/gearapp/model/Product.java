@@ -5,17 +5,27 @@ public class Product {
     private String name;
     private String image;
     private double price;
+    private String description;
     Category category;
 
     public Product() {
     }
 
-    public Product(int id, String name, String image, double price, Category category) {
+    public Product(int id, Category category, String description, double price, String image, String name) {
         this.id = id;
-        this.name = name;
-        this.image = image;
-        this.price = price;
         this.category = category;
+        this.description = description;
+        this.price = price;
+        this.image = image;
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getId() {
