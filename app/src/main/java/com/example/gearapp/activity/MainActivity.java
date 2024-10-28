@@ -1,11 +1,16 @@
 package com.example.gearapp.activity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,13 +20,21 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
 import com.example.gearapp.adapter.CategoryAdapter;
 import com.example.gearapp.model.Category;
+import com.example.gearapp.retrofit.APISelling;
+import com.example.gearapp.retrofit.RetrofitClient;
+import com.example.gearapp.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,14 +46,64 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     CategoryAdapter categoryAdapter;
     List<Category> mangloaisp;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    APISelling apiSelling;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        apiSelling = RetrofitClient.getInstance(Utils.BASE_URL).create(APISelling.class);
         Anhxa();
         ActionBar();
-        ActionViewFlipper();
+
+
+        if (isConnected(this)) {
+            Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG).show();
+            ActionViewFlipper();
+            getCategory();
+        } else {
+            Toast.makeText(getApplicationContext(), "no internet", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*private void getCategory() {
+        compositeDisposable.add(apiSelling.getCategory()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        categoryModel -> {
+                            if (categoryModel.isSuccess()) {
+                                Toast.makeText(getApplicationContext(),
+                                        categoryModel.getResult().get(0).getName(),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }
+                ));
+    }*/
+
+    private void getCategory() {
+        compositeDisposable.add(apiSelling.getCategory()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        categoryModel -> {
+                            if (categoryModel.isSuccess()) {
+                                mangloaisp.clear();
+                                mangloaisp.addAll(categoryModel.getResult());
+                                categoryAdapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Failed to retrieve categories",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        },
+                        throwable -> {
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + throwable.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                ));
     }
 
     private void ActionViewFlipper(){
@@ -89,4 +152,18 @@ public class MainActivity extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(getApplicationContext(),mangloaisp);
         listViewManHinhChinh.setAdapter(categoryAdapter);
     }
+    private boolean isConnected (Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI); //nho them quyen vao khong bi loi
+        NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if ((wifi != null && wifi.isConnected()) || (mobile != null && mobile.isConnected()) ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+
 }
