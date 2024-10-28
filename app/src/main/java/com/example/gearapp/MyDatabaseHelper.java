@@ -2,11 +2,15 @@ package com.example.gearapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import com.example.gearapp.model.Category;
+import com.example.gearapp.model.Product;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
@@ -26,6 +30,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PRODUCT_NAME = "name";
     private static final String COLUMN_PRODUCT_IMAGE = "image";
     private static final String COLUMN_PRODUCT_PRICE = "price";
+    private static final String COLUMN_PRODUCT_DESCRIPTION="description";
     private static final String COLUMN_PRODUCT_CATEGORY_ID = "category_id";
 
     //table cart
@@ -107,6 +112,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PRODUCT_NAME + " TEXT, " +
                 COLUMN_PRODUCT_IMAGE + " TEXT, " +
                 COLUMN_PRODUCT_PRICE + " TEXT, " +
+                COLUMN_PRODUCT_DESCRIPTION+"TEXT,"+
                 COLUMN_PRODUCT_CATEGORY_ID + " INTEGER, " +
                 "FOREIGN KEY (" + COLUMN_PRODUCT_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORY + "(" + COLUMN_CATEGORY_ID + "));";
         db.execSQL(createProductTable);
@@ -187,7 +193,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Thêm danh mục vào bảng category
-    void addCategory(String name, String image) {
+   public void addCategory(String name, String image) {
                 SQLiteDatabase db = this.getWritableDatabase();
                 ContentValues cv = new ContentValues();
 
@@ -202,13 +208,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Thêm sản phẩm vào bảng product
-    void addProduct(String name, String image, String price, int category_id) {
+    public void addProduct(String name, String image, String price,String description, int category_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_PRODUCT_NAME, name);
         cv.put(COLUMN_PRODUCT_IMAGE, image);
         cv.put(COLUMN_PRODUCT_PRICE, price);
+        cv.put(COLUMN_PRODUCT_DESCRIPTION,description);
         cv.put(COLUMN_PRODUCT_CATEGORY_ID, category_id);
         long result = db.insert(TABLE_PRODUCT, null, cv);
         if (result == -1) {
@@ -216,6 +223,39 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // Get Product by id
+    public Product getProductById(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("Product", null, "id = ?", new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+
+            int categoryId = cursor.getInt(cursor.getColumnIndexOrThrow("category_id"));
+            String categoryName = cursor.getString(cursor.getColumnIndexOrThrow("category_name"));
+
+            Category category = new Category();
+            category.setId(categoryId);
+            category.setName(categoryName);
+
+            Product product = new Product(
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    category,
+                    cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("price")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("image")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("name"))
+
+            );
+
+            cursor.close();
+            return product;
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return null;
     }
 
     // Thêm sản phẩm vào bảng cart
