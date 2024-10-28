@@ -15,19 +15,16 @@
 
         <activity
             android:name=".activity.AddCategory"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"/>
+
+
 
         <activity
             android:name=".activity.CategoryManagement"
             android:exported="false" />
         <activity
             android:name=".activity.AddProductActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activity.ProductManagementActivity"
             android:exported="false" />
