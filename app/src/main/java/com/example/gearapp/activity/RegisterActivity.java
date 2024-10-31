@@ -9,14 +9,11 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
 
-public class RegiterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
     EditText editEmailAddressReg, editPasswordReg, editFullnameReg, editPhoneNumberReg, editStatusReg;
 
     Button btnRegisterReg, btnLoginReg;
@@ -44,7 +41,7 @@ public class RegiterActivity extends AppCompatActivity {
         btnLoginReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(RegiterActivity.this, LoginActivity.class);
+                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(i);
             }
         });
@@ -52,7 +49,7 @@ public class RegiterActivity extends AppCompatActivity {
         btnRegisterReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyDatabaseHelper myDB = new MyDatabaseHelper(RegiterActivity.this);
+                MyDatabaseHelper myDB = new MyDatabaseHelper(RegisterActivity.this);
                 myDB.addUser(
                         editFullnameReg.getText().toString().trim(),
                         editEmailAddressReg.getText().toString().trim(),

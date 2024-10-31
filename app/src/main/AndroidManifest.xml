@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,27 +13,40 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GearApp"
         tools:targetApi="31">
+
         <activity
-            android:name=".activity.RegiterActivity"
-            android:exported="false" />
+            android:name=".activity.AddCategory"
+            android:exported="false"/>
+        <activity
+            android:name=".activity.AddProductActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activity.CategoryManagement"
+            android:exported="false"/>
+        <activity
+            android:name=".activity.ProductDetailActivity"
+            android:exported="false"/>
         <activity
             android:name=".activity.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activity.ProductManagementActivity"
+            android:exported="false"/>
 
         <activity
-            android:name=".ThanhToanActivity"
+            android:name=".activity.ThanhToanActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>
