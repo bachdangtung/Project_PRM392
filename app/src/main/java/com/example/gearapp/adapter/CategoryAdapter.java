@@ -8,16 +8,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Glide;
 import com.example.gearapp.R;
 import com.example.gearapp.model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends BaseAdapter {
 
     List<Category> array;
     Context context;
+
 
     public CategoryAdapter(Context context, List<Category> array) {
         this.array = array;
@@ -61,4 +65,5 @@ public class CategoryAdapter extends BaseAdapter {
         }
         return view;
     }
+
 }
