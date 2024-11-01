@@ -17,13 +17,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
 import com.example.gearapp.adapter.CategoryAdapter;
+import com.example.gearapp.adapter.NewProductAdapter;
 import com.example.gearapp.model.Category;
+import com.example.gearapp.model.NewProduct;
+import com.example.gearapp.model.NewProductModel;
 import com.example.gearapp.retrofit.APISelling;
 import com.example.gearapp.retrofit.RetrofitClient;
 import com.example.gearapp.utils.Utils;
@@ -48,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     List<Category> mangloaisp;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     APISelling apiSelling;
+    List<NewProduct> newarrayProduct;
+    NewProductAdapter spAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +68,29 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG).show();
             ActionViewFlipper();
             getCategory();
+            getNewProduct();
         } else {
             Toast.makeText(getApplicationContext(), "no internet", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private  void getNewProduct() {
+        compositeDisposable.add(apiSelling.getNewProduct()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        newProductModel -> {
+                            if(newProductModel.isSuccess()) {
+                                newarrayProduct = newProductModel.getResult();
+                                spAdapter = new NewProductAdapter(newarrayProduct, getApplicationContext());
+                                recyclerViewManHinhChinh.setAdapter(spAdapter);
+
+                            }
+                        },
+                        throwable -> {
+                            Toast.makeText(getApplicationContext(), "can not connect server"+throwable.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                ));
     }
 
     /*private void getCategory() {
@@ -143,11 +169,15 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbarmanhinhchinh);
         viewFlipper = findViewById(R.id.viewflipper);
         recyclerViewManHinhChinh = findViewById(R.id.recycleview);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
+        recyclerViewManHinhChinh.setLayoutManager(layoutManager);
+        recyclerViewManHinhChinh.setHasFixedSize(true);
         listViewManHinhChinh = findViewById(R.id.listviewmanhinhchinh);
         navigationView = findViewById(R.id.navigationview);
         drawerLayout = findViewById(R.id.drawerlayout);
         //khoi tao list
         mangloaisp = new ArrayList<>();
+        newarrayProduct = new ArrayList<>();
         //khoi tao adapter
         categoryAdapter = new CategoryAdapter(getApplicationContext(),mangloaisp);
         listViewManHinhChinh.setAdapter(categoryAdapter);
