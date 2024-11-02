@@ -1,64 +1,84 @@
 package com.example.gearapp.activity;
 
+import static com.example.gearapp.R.*;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText editEmailAddressReg, editPasswordReg, editFullnameReg, editPhoneNumberReg, editStatusReg;
-
-    Button btnRegisterReg, btnLoginReg;
-    TextView txtDisplayInfoReg;
+    EditText username, password, repassword, emailEdt, phonenumber;
+    Button signup, signin;
+    MyDatabaseHelper DB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_regiter);
+        setContentView(layout.activity_register);
 
-        editEmailAddressReg = findViewById(R.id.editEmailAddressReg);
-        editPasswordReg = findViewById(R.id.editPasswordReg);
-        editFullnameReg = findViewById(R.id.editFullnameReg);
-        editPhoneNumberReg = findViewById(R.id.editPhoneNumberReg);
-        editStatusReg = findViewById(R.id.editStatusReg);
-        //editDOBReg = findViewById(R.id.editDOBReg);
-        //editBioReg = findViewById(R.id.editBioReg);
+        username = (EditText) findViewById(R.id.username);
+        password = (EditText) findViewById(R.id.password);
+        repassword = (EditText) findViewById(R.id.repassword);
+        emailEdt = (EditText) findViewById(R.id.email);
+        phonenumber = (EditText) findViewById(id.phonenumber);
+        signup = (Button) findViewById(R.id.btnsignup);
+        signin = (Button) findViewById(R.id.btnsignin);
+        DB = new MyDatabaseHelper(this);
 
-        txtDisplayInfoReg = findViewById(R.id.txtDisplayInfoReg);
-
-        btnLoginReg = findViewById(R.id.btnLoginReg);
-        btnRegisterReg = findViewById(R.id.btnRegisterReg);
-
-
-        btnLoginReg.setOnClickListener(new View.OnClickListener() {
+        signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(i);
-            }
+                String user = username.getText().toString();
+                String pass = password.getText().toString();
+                String repass = repassword.getText().toString();
+                String email = emailEdt.getText().toString();
+                String phone = phonenumber.getText().toString();
+
+                if(user.equals("")||pass.equals("")||repass.equals("")||email.equals("")||phone.equals(""))
+                    Toast.makeText(RegisterActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
+                else{
+                    if(pass.equals(repass)){
+                        Boolean checkuser = DB.checkusername(user);
+                        if(checkuser==false){
+                            Boolean insert = DB.addUser(user, pass, email, phone);
+                            if(insert==true){
+                                Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else{
+                            Toast.makeText(RegisterActivity.this, "User already exists! please sign in", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(RegisterActivity.this, "Passwords not matching", Toast.LENGTH_SHORT).show();
+                    }
+                } }
         });
 
-        btnRegisterReg.setOnClickListener(new View.OnClickListener() {
+        signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyDatabaseHelper myDB = new MyDatabaseHelper(RegisterActivity.this);
-                myDB.addUser(
-                        editFullnameReg.getText().toString().trim(),
-                        editEmailAddressReg.getText().toString().trim(),
-                        editPasswordReg.getText().toString().trim(),
-                        editPhoneNumberReg.getText().toString().trim(),
-                        editStatusReg.getText().toString().trim()
-                );
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
             }
         });
-
     }
 }
