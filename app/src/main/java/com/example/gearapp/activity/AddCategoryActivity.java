@@ -8,14 +8,11 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
 
-public class AddCategory extends AppCompatActivity {
+public class AddCategoryActivity extends AppCompatActivity {
 
     EditText edname,edImage;
     Button btnSave;
@@ -34,10 +31,10 @@ public class AddCategory extends AppCompatActivity {
                  String name = edname.getText().toString().trim();
                  String image = edImage.getText().toString().trim();
                  if (name.isEmpty() ||   image.isEmpty()) {
-                     Toast.makeText(AddCategory.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(AddCategoryActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                  } else {
 
-                     MyDatabaseHelper myDB = new MyDatabaseHelper(AddCategory.this);
+                     MyDatabaseHelper myDB = new MyDatabaseHelper(AddCategoryActivity.this);
                      myDB.addCategory(name, image);
                  }
              }

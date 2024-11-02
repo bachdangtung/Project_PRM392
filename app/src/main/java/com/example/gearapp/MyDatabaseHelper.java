@@ -192,8 +192,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+ // Get list category
+     public Cursor readAllCategory(){
+        String query = "SELECT * FROM " + TABLE_CATEGORY;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
     // Thêm danh mục vào bảng category
-   public void addCategory(String name, String image) {
+     public void addCategory(String name, String image) {
                 SQLiteDatabase db = this.getWritableDatabase();
                 ContentValues cv = new ContentValues();
 
