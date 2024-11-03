@@ -21,6 +21,9 @@ public class User {
         this.email = email;
     }
 
+    public User(int userId) {
+    }
+
     public int getId() {
         return id;
     }

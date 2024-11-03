@@ -2,6 +2,7 @@ package com.example.gearapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ import androidx.annotation.Nullable;
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private Context context;
+    private static String DB_PATH = "D:\\PRM392_DB";
     private static final String DATABASE_NAME = "GearApp.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -47,14 +49,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //table order
     private static final String TABLE_ORDER = "order";
-    private static final String COLUMN_ORDER_ID = "id";
-    private static final String COLUMN_ORDER_ADDRESS = "address";
-    private static final String COLUMN_ORDER_PHONE = "phone";
-    private static final String COLUMN_ORDER_EMAIL = "email";
-    private static final String COLUMN_ORDER_QUANTITY = "quantity";
-    private static final String COLUMN_ORDER_TOTALMONEY = "totalmoney";
-    private static final String COLUMN_ORDER_STATUS = "status";
-    private static final String COLUMN_ORDER_DATEORDER = "dateorder";
+    public static final String COLUMN_ORDER_ID = "id";
+    public static final String COLUMN_ORDER_ADDRESS = "address";
+    public static final String COLUMN_ORDER_PHONE = "phone";
+    public static final String COLUMN_ORDER_EMAIL = "email";
+    public static final String COLUMN_ORDER_QUANTITY = "quantity";
+    public static final String COLUMN_ORDER_TOTALMONEY = "totalmoney";
+    public static final String COLUMN_ORDER_STATUS = "status";
+    public static final String COLUMN_ORDER_DATEORDER = "dateorder";
     private static final String COLUMN_ORDER_USER_ID = "user_id";
 
     //table orderdetail
@@ -340,4 +342,24 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public Cursor getUserOrders(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Truy vấn để lấy các đơn hàng có userId phù hợp
+        String query = "SELECT * FROM \"order\" WHERE " + COLUMN_ORDER_USER_ID + " = ?";
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+            if (cursor != null && cursor.getCount() == 0) {
+                Toast.makeText(context, "Không tìm thấy đơn hàng", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        return cursor;
+    }
+
 }
