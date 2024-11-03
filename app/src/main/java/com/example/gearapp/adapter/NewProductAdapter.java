@@ -39,8 +39,8 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.My
         NewProduct newProduct = array.get(position);
         holder.txtname.setText(newProduct.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.txtprice.setText("Price: "+decimalFormat.format(Double.parseDouble(newProduct.getPrice()))+"Đ");
-        //holder.txtprice.setText(newProduct.getPrice()+ "");
+        //holder.txtprice.setText("Price: "+decimalFormat.format(Double.parseDouble(newProduct.getPrice()))+"Đ");
+        holder.txtprice.setText(newProduct.getPrice()+ "");
         Glide.with(context).load(newProduct.getImage()).into(holder.imgimage);
     }
 

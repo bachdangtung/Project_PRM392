@@ -10,7 +10,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.gearapp.model.Category;
+import com.example.gearapp.model.NewProduct;
 import com.example.gearapp.model.Product;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
