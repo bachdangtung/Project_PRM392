@@ -23,21 +23,22 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText username, password, repassword, emailEdt, phonenumber;
-    Button signup, signin;
+    TextInputEditText username, password, repassword, emailEdt, phonenumber;
+    Button signup;
+    TextView loginText;
     MyDatabaseHelper DB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_register);
 
-        username = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
-        repassword = (EditText) findViewById(R.id.repassword);
-        emailEdt = (EditText) findViewById(R.id.email);
-        phonenumber = (EditText) findViewById(id.phonenumber);
+        username = (TextInputEditText) findViewById(R.id.username);
+        password = (TextInputEditText) findViewById(R.id.password);
+        repassword = (TextInputEditText) findViewById(R.id.repassword);
+        emailEdt = (TextInputEditText) findViewById(R.id.email);
+        phonenumber = (TextInputEditText) findViewById(id.phonenumber);
         signup = (Button) findViewById(R.id.btnsignup);
-        signin = (Button) findViewById(R.id.btnsignin);
+        loginText = (TextView) findViewById(id.loginText);
         DB = new MyDatabaseHelper(this);
 
         signup.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } }
         });
 
-        signin.setOnClickListener(new View.OnClickListener() {
+        loginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

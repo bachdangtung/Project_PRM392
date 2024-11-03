@@ -26,7 +26,7 @@ import java.util.Objects;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText username, password;
+    TextInputEditText  username, password;
     TextView registerText;
     Button btnlogin;
     MyDatabaseHelper DB;
@@ -35,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        username = (EditText) findViewById(R.id.username1);
-        password = (EditText) findViewById(R.id.password1);
+        username = (TextInputEditText ) findViewById(R.id.username1);
+        password = (TextInputEditText ) findViewById(R.id.password1);
         btnlogin = (Button) findViewById(R.id.btnsignin1);
         registerText = findViewById(R.id.registerText);
         DB = new MyDatabaseHelper(this);
