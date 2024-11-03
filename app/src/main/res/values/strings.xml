@@ -18,7 +18,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="here_s_your_first_step_with_us">Here\'s Your first step with us!</string>
     <string name="todo">TODO</string>
-    <string name="name">Name</string>
+    <string name="name">UserName</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="conform_password">Conform Password</string>
@@ -41,5 +41,6 @@
     <string name="iphone_15">iphone 15</string>
     <string name="please_order">PLEASE ORDER</string>
     <string name="save">SAVE</string>
+    <string name="phonenumber">Phone Number</string>
 
 </resources>
