@@ -88,4 +88,8 @@ public class CategoryManagementActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+    protected void onResume() {
+        super.onResume();
+        loadCategories(); // Tải lại danh sách
+    }
 }

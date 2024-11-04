@@ -71,4 +71,8 @@ public class ProductManagementActivity extends AppCompatActivity {
             cursor.close();
         }
     }
+    protected void onResume() {
+        super.onResume();
+        loadProducts(); // Tải lại danh sách đơn hàng để cập nhật thay đổi
+    }
 }
