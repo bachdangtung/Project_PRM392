@@ -11,7 +11,9 @@ import androidx.annotation.Nullable;
 
 import com.example.gearapp.model.Category;
 import com.example.gearapp.model.NewProduct;
+import com.example.gearapp.model.Order;
 import com.example.gearapp.model.Product;
+import com.example.gearapp.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,7 +198,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
- // Get list category
+ // Get list category cho add
      public Cursor readAllCategory(){
         String query = "SELECT * FROM " + TABLE_CATEGORY;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -207,6 +209,29 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+    // Get list category cho update sản phẩm
+    public List<Category> readAllCategorytoUpdate() {
+        List<Category> categoryList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Category", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                // Sử dụng getColumnIndexOrThrow để kiểm tra tên cột
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+
+                // Giả sử `Category` có constructor (int id, String name)
+                Category category = new Category(id, name);
+                categoryList.add(category);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return categoryList;
+    }
+
+
 
     //get category by id
     public Category getCategoryById(int id) {
@@ -239,6 +264,42 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    // update category
+    public boolean updateCategory(Category category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_CATEGORY_NAME, category.getName());
+        values.put(COLUMN_CATEGORY_IMAGE, category.getImage());
+
+        // Update category và trả về số dòng bị ảnh hưởng
+        int result = db.update(TABLE_CATEGORY,
+                values,
+                COLUMN_CATEGORY_ID + " = ?",
+                new String[]{String.valueOf(category.getId())});
+
+        if(result > 0) {
+            Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Toast.makeText(context, "Update Failed!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+    public boolean insertCategory(Category category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_CATEGORY_NAME, category.getName());
+        values.put(COLUMN_CATEGORY_IMAGE, category.getImage());
+
+        // Thêm danh mục và kiểm tra số dòng bị ảnh hưởng
+        long result = db.insert(TABLE_CATEGORY, null, values);
+
+        return result != -1; // Trả về true nếu thêm thành công, false nếu thất bại
+    }
+
     // get all Product
     public Cursor readAllProduct(){
         String query = "SELECT * FROM " + TABLE_PRODUCT;
@@ -301,6 +362,26 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return null;
     }
+    // update product
+    // Phương thức cập nhật sản phẩm trong cơ sở dữ liệu
+    public boolean updateProduct(Product product) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", product.getName());
+        values.put("price", product.getPrice());
+        values.put("description", product.getDescription());
+        values.put("image", product.getImage());
+        values.put("category_id", product.getCategory_id()); // Assuming you have a method to get category_id
+
+        // Update the product in the database
+        int rowsAffected = db.update("products", values, "id = ?", new String[]{String.valueOf(product.getId())});
+        db.close();
+
+        // Return true if update was successful
+        return rowsAffected > 0;
+    }
+
+
 
     // Thêm sản phẩm vào bảng cart
     void addCart(String name, String image, String price, int quantity) {
@@ -378,6 +459,41 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
     }
+// get order để change status
+    public List<Order> getSimpleOrderList() {
+        List<Order> orders = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT o.id, o.totalMoney, o.status, o.dateOrder, u.name " +
+                "FROM [order] o JOIN user u ON o.user_id = u.id";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String totalMoney = cursor.getString(1);
+                String status = cursor.getString(2);
+                String dateOrder = cursor.getString(3);
+                String userName = cursor.getString(4);
+
+                // Create a User object with only the name
+                User user = new User();
+                user.setName(userName);
+
+                // Create Order object using the constructor
+                Order order = new Order(id, totalMoney, status, dateOrder, user);
+
+                // Add the Order to the list
+                orders.add(order);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return orders;
+    }
+
 
     // Thêm chi tiết đơn hàng vào bảng orderdetail
     void addOrderDetail(int quantity, String price, int order_id, int product_id) {
