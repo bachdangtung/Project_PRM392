@@ -26,10 +26,10 @@
             android:exported="false" />
         <activity
             android:name=".activity.OrderManagementActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activity.AdminDashboardActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activity.AddCategoryActivity"
             android:exported="false" />
@@ -38,7 +38,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.CategoryManagementActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activity.ProductDetailActivity"
             android:exported="true" />
