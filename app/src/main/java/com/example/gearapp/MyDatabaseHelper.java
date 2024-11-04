@@ -116,7 +116,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PRODUCT_NAME + " TEXT, " +
                 COLUMN_PRODUCT_IMAGE + " TEXT, " +
                 COLUMN_PRODUCT_PRICE + " TEXT, " +
-                COLUMN_PRODUCT_DESCRIPTION+"TEXT,"+
+                COLUMN_PRODUCT_DESCRIPTION + " TEXT, " +
                 COLUMN_PRODUCT_CATEGORY_ID + " INTEGER, " +
                 "FOREIGN KEY (" + COLUMN_PRODUCT_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORY + "(" + COLUMN_CATEGORY_ID + "));";
         db.execSQL(createProductTable);
@@ -208,6 +208,23 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    //get category by id
+    public Category getCategoryById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Category category = null;
+
+        Cursor cursor = db.query("Category", new String[]{"id", "name"}, "id = ?",
+                new String[]{String.valueOf(id)}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            category = new Category(cursor.getInt(0), cursor.getString(1));
+            cursor.close();
+        }
+
+        db.close();
+        return category;
+    }
+
     // Thêm danh mục vào bảng category
      public void addCategory(String name, String image) {
                 SQLiteDatabase db = this.getWritableDatabase();
@@ -221,6 +238,17 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 } else {
                     Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
+    }
+    // get all Product
+    public Cursor readAllProduct(){
+        String query = "SELECT * FROM " + TABLE_PRODUCT;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
     }
 
     // Thêm sản phẩm vào bảng product

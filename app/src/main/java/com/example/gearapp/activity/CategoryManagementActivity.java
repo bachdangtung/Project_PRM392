@@ -1,8 +1,10 @@
 package com.example.gearapp.activity;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+
 import android.widget.Toast;
 
 
@@ -15,6 +17,7 @@ import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
 import com.example.gearapp.adapter.CategoryManagementAdapter;
 import com.example.gearapp.model.Category;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,7 @@ public class CategoryManagementActivity extends AppCompatActivity {
     private CategoryManagementAdapter adapter;
     private List<Category> categoryList;
     private MyDatabaseHelper db;
+    private FloatingActionButton fabAddCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +38,17 @@ public class CategoryManagementActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewCategory);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        fabAddCategory = findViewById(R.id.fabAddCategory);
         // Khởi tạo MyDatabaseHelper
         db = new MyDatabaseHelper(this);
 
         // Tải danh mục từ cơ sở dữ liệu
         loadCategories();
+
+        fabAddCategory.setOnClickListener(view -> {
+            Intent intent = new Intent(CategoryManagementActivity.this, AddCategoryActivity.class);
+            startActivity(intent);
+        });
     }
     private void loadCategories() {
         categoryList = new ArrayList<>();
