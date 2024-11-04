@@ -14,7 +14,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
-
+import com.google.android.material.textfield.TextInputEditText;
 import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
 
