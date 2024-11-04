@@ -1,5 +1,7 @@
 package com.example.gearapp.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.gearapp.R;
+import com.example.gearapp.activity.UpdateCategoryActivity;
 import com.example.gearapp.model.Category;
 
 import java.util.List;
@@ -18,8 +21,10 @@ import java.util.List;
 public class CategoryManagementAdapter extends RecyclerView.Adapter<CategoryManagementAdapter.MyViewHolder> {
 
     private final List<Category> categoryList;
+    private final Context context;
 
-    public CategoryManagementAdapter(List<Category> categoryList) {
+    public CategoryManagementAdapter(Context context, List<Category> categoryList) {
+        this.context = context;
         this.categoryList = categoryList;
     }
 
@@ -41,13 +46,14 @@ public class CategoryManagementAdapter extends RecyclerView.Adapter<CategoryMana
         Glide.with(holder.imageViewCategory.getContext())
                 .load(category.getImage()) // Đường dẫn URL của hình ảnh
                 .placeholder(R.drawable.baseline_image_24) // Hình ảnh mặc định khi tải
-                .error(R.drawable.broken_image_24)
+                .error(R.drawable.broken_image_24) // Hình ảnh lỗi nếu tải thất bại
                 .into(holder.imageViewCategory);
 
-
+        // Xử lý sự kiện click vào item để chuyển đến UpdateCategoryActivity
         holder.itemView.setOnClickListener(v -> {
-            int categoryId = category.getId();
-
+            Intent intent = new Intent(context, UpdateCategoryActivity.class);
+            intent.putExtra("categoryId", category.getId()); // Truyền categoryId
+            context.startActivity(intent);
         });
     }
 

@@ -15,6 +15,14 @@ public class Order {
     public Order() {
     }
 
+    public Order(int id, String totalMoney, String status, String dateOrder, User user) {
+        this.id = id;
+        this.totalMoney = totalMoney;
+        this.status = status;
+        this.dateOrder = dateOrder;
+        this.user = user;
+    }
+
     public Order(int id, String address, String phone, String email, int quantity, String totalMoney, String status, String dateOrder, User user) {
         this.id = id;
         this.address = address;
