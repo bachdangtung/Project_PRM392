@@ -489,39 +489,41 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 // get order để change status
-    public List<Order> getSimpleOrderList() {
-        List<Order> orders = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
+public List<Order> getSimpleOrderList() {
+    List<Order> orders = new ArrayList<>();
+    SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT o.id, o.totalMoney, o.status, o.dateOrder, u.name " +
-                "FROM [order] o JOIN user u ON o.user_id = u.id";
+    // Truy vấn để lấy danh sách đơn hàng cùng với thông tin người dùng
+    String query = "SELECT o.id, o.totalMoney, o.status, o.dateOrder, u.name " +
+            "FROM [order] o JOIN user u ON o.user_id = u.id";
 
-        Cursor cursor = db.rawQuery(query, null);
+    Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String totalMoney = cursor.getString(1);
-                String status = cursor.getString(2);
-                String dateOrder = cursor.getString(3);
-                String userName = cursor.getString(4);
+    if (cursor.moveToFirst()) {
+        do {
+            int id = cursor.getInt(0);
+            String totalMoney = cursor.getString(1);
+            String status = cursor.getString(2);
+            String dateOrder = cursor.getString(3);
+            String userName = cursor.getString(4);
 
-                // Create a User object with only the name
-                User user = new User();
-                user.setName(userName);
+            // Tạo đối tượng User với chỉ tên
+            User user = new User();
+            user.setName(userName);
 
-                // Create Order object using the constructor
-                Order order = new Order(id, totalMoney, status, dateOrder, user);
+            // Tạo đối tượng Order bằng cách sử dụng constructor
+            Order order = new Order(id, totalMoney, status, dateOrder, user);
 
-                // Add the Order to the list
-                orders.add(order);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return orders;
+            // Thêm Order vào danh sách
+            orders.add(order);
+        } while (cursor.moveToNext());
     }
+
+    cursor.close();
+    db.close();
+    return orders;
+}
+
 
 
     // Thêm chi tiết đơn hàng vào bảng orderdetail
@@ -540,6 +542,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    // update status
+    public boolean updateOrderStatus(int orderId, String newStatus) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("status", newStatus);
+
+        int rowsAffected = db.update("[order]", values, "id = ?", new String[]{String.valueOf(orderId)});
+        db.close();
+        return rowsAffected > 0;
+    }
+
 
     // Thêm thống kê vào bảng statistic
     void addStatistic(String date, String totalmoney, int totalorder, int totalproduct) {
