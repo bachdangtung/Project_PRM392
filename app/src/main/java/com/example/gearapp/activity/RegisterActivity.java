@@ -69,6 +69,9 @@ public class RegisterActivity extends AppCompatActivity {
                             if(insert==true){
                                 Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                                intent.putExtra("username", user);
+                                intent.putExtra("email", email);
+                                intent.putExtra("phone", phone);
                                 startActivity(intent);
                             }else{
                                 Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();

@@ -5,5 +5,6 @@
     <color name="colortext">#FF03DAC5</color>
     <color name="hintColor">#1B1A1A</color>
     <color name="buttonColor">#10635F</color>
-
+    <color name="beigeColor">#f5f5dc</color>
+    <color name="fuschiaColor">#ff1493</color>
 </resources>
