@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if(pass.equals(repass)){
                         Boolean checkuser = DB.checkusername(user);
                         if(checkuser==false){
-                            Boolean insert = DB.addUser(user, pass, email, phone);
+                            Boolean insert = DB.addUser(email, user, pass, phone);
                             if(insert==true){
                                 Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
