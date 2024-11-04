@@ -358,6 +358,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             return false;
     }
 
+    // Thêm vào trong lớp DB
+    public Boolean checkEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM user WHERE email = ?", new String[]{email});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
     // Thêm đơn hàng vào bảng order
     void addOrder(String address, String phone, String email, int quantity, String totalmoney, String status, String dateorder, int user_id) {
         SQLiteDatabase db = this.getWritableDatabase();
