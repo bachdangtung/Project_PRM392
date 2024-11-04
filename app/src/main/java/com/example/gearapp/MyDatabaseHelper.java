@@ -63,14 +63,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //table order
     private static final String TABLE_ORDER = "order";
-    private static final String COLUMN_ORDER_ID = "id";
-    private static final String COLUMN_ORDER_ADDRESS = "address";
-    private static final String COLUMN_ORDER_PHONE = "phone";
-    private static final String COLUMN_ORDER_EMAIL = "email";
-    private static final String COLUMN_ORDER_QUANTITY = "quantity";
-    private static final String COLUMN_ORDER_TOTALMONEY = "totalmoney";
-    private static final String COLUMN_ORDER_STATUS = "status";
-    private static final String COLUMN_ORDER_DATEORDER = "dateorder";
+    public static final String COLUMN_ORDER_ID = "id";
+    public static final String COLUMN_ORDER_ADDRESS = "address";
+    public static final String COLUMN_ORDER_PHONE = "phone";
+    public static final String COLUMN_ORDER_EMAIL = "email";
+    public static final String COLUMN_ORDER_QUANTITY = "quantity";
+    public static final String COLUMN_ORDER_TOTALMONEY = "totalmoney";
+    public static final String COLUMN_ORDER_STATUS = "status";
+    public static final String COLUMN_ORDER_DATEORDER = "dateorder";
     private static final String COLUMN_ORDER_USER_ID = "user_id";
 
     //table orderdetail
@@ -605,7 +605,46 @@ public List<Order> getSimpleOrderList() {
         }
     }
 
+    public Cursor getUserOrders(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        // Truy vấn để lấy các đơn hàng có userId phù hợp
+        String query = "SELECT * FROM \"order\" WHERE " + COLUMN_ORDER_USER_ID + " = ?";
+        Cursor cursor = null;
 
+        try {
+            cursor = db.rawQuery(query, new String[] { String.valueOf(userId) });
+            if (cursor != null && cursor.getCount() == 0) {
+                Toast.makeText(context, "Không tìm thấy đơn hàng", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        return cursor;
+    }
+
+    public Cursor getOrderDetails(int orderId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Truy vấn để lấy chi tiết đơn hàng và tên sản phẩm
+        String query = "SELECT orderdetail.id, orderdetail.quantity, orderdetail.price, product.name AS product_name," +
+                "product.image AS product_image " +
+                "FROM orderdetail " +
+                "JOIN product ON orderdetail.product_id = product.id " +
+                "WHERE orderdetail.order_id = ?";
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(query, new String[] { String.valueOf(orderId) });
+            if (cursor != null && cursor.getCount() == 0) {
+                Toast.makeText(context, "Không tìm thấy chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        return cursor;
+    }
 
 }
