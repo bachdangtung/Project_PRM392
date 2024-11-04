@@ -22,8 +22,8 @@ public class AddCategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_category);
-         edname = findViewById(R.id.editTextCategoryImage);
-         edImage = findViewById(R.id.editTextCategoryName);
+         edname = findViewById(R.id.editTextCategoryName);
+         edImage = findViewById(R.id.editTextCategoryImage);
          btnSave = findViewById(R.id.buttonSaveCategory);
          btnSave.setOnClickListener(new View.OnClickListener() {
              @Override
