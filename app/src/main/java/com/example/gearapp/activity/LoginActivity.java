@@ -14,7 +14,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
-
+import com.google.android.material.textfield.TextInputEditText;
 import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -22,20 +22,20 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
-
-
 public class LoginActivity extends AppCompatActivity {
-    TextInputEditText  username, password;
+    TextInputEditText username, password;
     TextView registerText;
     Button btnlogin;
     MyDatabaseHelper DB;
+    private static final String ADMIN_USER = "Admin";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        username = (TextInputEditText ) findViewById(R.id.username1);
-        password = (TextInputEditText ) findViewById(R.id.password1);
+        username = (TextInputEditText) findViewById(R.id.username1);
+        password = (TextInputEditText) findViewById(R.id.password1);
         btnlogin = (Button) findViewById(R.id.btnsignin1);
         registerText = findViewById(R.id.registerText);
         DB = new MyDatabaseHelper(this);
@@ -47,15 +47,24 @@ public class LoginActivity extends AppCompatActivity {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
 
-                if(user.equals("")||pass.equals(""))
+                if (user.equals("") || pass.equals(""))
                     Toast.makeText(LoginActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
-                else{
+                else {
                     Boolean checkuserpass = DB.checkusernamepassword(user, pass);
-                    if(checkuserpass==true){
-                        Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
-                        Intent intent  = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                    }else{
+                    if (checkuserpass == true) {
+                        // So sánh email đăng nhập với email admin cố định
+                        if (user.equals(ADMIN_USER)) {
+                            // Nếu là admin, chuyển đến AdminDashboard
+                            Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // Nếu là user, chuyển đến HomeActivity
+                            Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    } else {
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     }
                 }

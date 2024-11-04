@@ -18,6 +18,11 @@ import java.util.List;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
+    // Table dashboard
+    private static final String TABLE_DASHBOARD = "dashboard";
+    private static final String COLUMN_DASHBOARD_NAME = "name";
+    private static final String COLUMN_DASHBOARD_IMAGE = "image";
+
     private Context context;
     private static String DB_PATH = "D:\\PRM392_DB";
     private static final String DATABASE_NAME = "GearApp.db";
@@ -94,6 +99,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_MESSAGE_SUCCESS = "success";
     private static final String COLUMN_MESSAGE_MESSAGE = "message";
     private static final String COLUMN_MESSAGE_NAME = "name";
+    private String COLUMN_Dashboard_ID;
 
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -115,7 +121,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PRODUCT_NAME + " TEXT, " +
                 COLUMN_PRODUCT_IMAGE + " TEXT, " +
                 COLUMN_PRODUCT_PRICE + " TEXT, " +
-                COLUMN_PRODUCT_DESCRIPTION + "TEXT," +
+                COLUMN_PRODUCT_DESCRIPTION + " TEXT, " +
                 COLUMN_PRODUCT_CATEGORY_ID + " INTEGER, " +
                 "FOREIGN KEY (" + COLUMN_PRODUCT_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORY + "("
                 + COLUMN_CATEGORY_ID + "));";
@@ -189,6 +195,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_MESSAGE_MESSAGE + " TEXT, " +
                 COLUMN_MESSAGE_NAME + " TEXT);";
         db.execSQL(createMessageTable);
+
+        // tao bang dashboard
+        String createDashboardTable = "CREATE TABLE " + TABLE_DASHBOARD + " (" +
+                COLUMN_Dashboard_ID + " INTEGER, " +
+                COLUMN_DASHBOARD_NAME + " TEXT, " +
+                COLUMN_DASHBOARD_IMAGE + " TEXT);";
+        db.execSQL(createDashboardTable);
     }
 
     @Override
@@ -210,6 +223,23 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    // get category by id
+    public Category getCategoryById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Category category = null;
+
+        Cursor cursor = db.query("Category", new String[] { "id", "name" }, "id = ?",
+                new String[] { String.valueOf(id) }, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            category = new Category(cursor.getInt(0), cursor.getString(1));
+            cursor.close();
+        }
+
+        db.close();
+        return category;
+    }
+
     // Thêm danh mục vào bảng category
     public void addCategory(String name, String image) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -223,6 +253,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // get all Product
+    public Cursor readAllProduct() {
+        String query = "SELECT * FROM " + TABLE_PRODUCT;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
     }
 
     // Thêm sản phẩm vào bảng product
@@ -330,6 +372,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             return true;
         else
             return false;
+    }
+
+    // Thêm vào trong lớp DB
+    public Boolean checkEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM user WHERE email = ?", new String[] { email });
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 
     // Thêm đơn hàng vào bảng order
@@ -452,7 +503,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
 
         try {
-            cursor = db.rawQuery(query, new String[]{String.valueOf(orderId)});
+            cursor = db.rawQuery(query, new String[] { String.valueOf(orderId) });
             if (cursor != null && cursor.getCount() == 0) {
                 Toast.makeText(context, "Không tìm thấy chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
             }
@@ -462,8 +513,5 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
-
-
-
 
 }

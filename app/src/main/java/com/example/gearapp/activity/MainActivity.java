@@ -1,12 +1,15 @@
 package com.example.gearapp.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,8 +27,10 @@ import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
 import com.example.gearapp.adapter.CategoryAdapter;
 import com.example.gearapp.adapter.NewProductAdapter;
+import com.example.gearapp.adapter.ProductAdapter;
 import com.example.gearapp.model.Category;
 import com.example.gearapp.model.NewProduct;
+import com.example.gearapp.model.Product;
 import com.google.android.material.navigation.NavigationView;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,24 +55,53 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        ((AppCompatActivity) this).setContentView(R.layout.activity_main);
         myDatabaseHelper = new MyDatabaseHelper(this);
         Anhxa();
         ActionBar();
         loadDataFromDatabase();
-
+        List<Product> dashboardProducts = getDashboardProducts();
+        ProductAdapter productAdapter = new ProductAdapter(dashboardProducts, this);
+        listViewManHinhChinh.setAdapter(productAdapter);
         if (isConnected(this)) {
             Toast.makeText(getApplicationContext(), "Connected to internet", Toast.LENGTH_LONG).show();
             ActionViewFlipper();
+            getEventClick();
         } else {
             Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
         }
     }
 
+    private void getEventClick() {
+        listViewManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        Intent Home = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(Home);
+                        break;
+                    case 1:
+                        //Intent Profile = new Intent(getApplicationContext(), ProfileActivity.class);
+                        //startActivity(Profile);
+                        break;
+                    case 2:
+                        Intent Cart = new Intent(getApplicationContext(), CartActivity.class);
+                        startActivity(Cart);
+                        break;
+                    case 3:
+                        Intent Logout = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(Logout);
+                        break;
+                }
+            }
+        });
+    }
+
     private void loadDataFromDatabase() {
         newarrayProduct = getAllProducts();
         if (!newarrayProduct.isEmpty()) {
-            spAdapter = new NewProductAdapter(newarrayProduct, getApplicationContext());
+            spAdapter = new NewProductAdapter(newarrayProduct, this);
             recyclerViewManHinhChinh.setAdapter(spAdapter);
         } else {
             Toast.makeText(this, "No products found", Toast.LENGTH_SHORT).show();
@@ -156,6 +190,86 @@ public class MainActivity extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(getApplicationContext(), mangloaisp);
         listViewManHinhChinh.setAdapter(categoryAdapter);
     }
+
+    private void getNewProduct() {
+        newarrayProduct = getAllProducts(); // Use your existing getAllProducts method
+
+        if (!newarrayProduct.isEmpty()) {
+            spAdapter = new NewProductAdapter(newarrayProduct, this);
+            recyclerViewManHinhChinh.setAdapter(spAdapter);
+        } else {
+            Toast.makeText(getApplicationContext(), "No new products found", Toast.LENGTH_SHORT).show();
+        }
+
+        Log.d("NewProductCount", "Number of new products: " + newarrayProduct.size());
+    }
+
+
+    private void getCategory() {
+        mangloaisp = getAllCategories(); // Fetch categories directly in MainActivity
+
+        if (!mangloaisp.isEmpty()) {
+            categoryAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(getApplicationContext(), "No categories found", Toast.LENGTH_LONG).show();
+        }
+
+        Log.d("CategoryCount", "Number of categories: " + mangloaisp.size());
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        SQLiteDatabase db = myDatabaseHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM category", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Category category = new Category();
+                int idIndex = cursor.getColumnIndex("id");
+                int nameIndex = cursor.getColumnIndex("name");
+                int imageIndex = cursor.getColumnIndex("image");
+
+                if (idIndex != -1) category.setId(cursor.getInt(idIndex));
+                if (nameIndex != -1) category.setName(cursor.getString(nameIndex));
+                if (imageIndex != -1) category.setImage(cursor.getString(imageIndex));
+
+                categories.add(category);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return categories;
+    }
+
+    public List<Product> getDashboardProducts() {
+        List<Product> productList = new ArrayList<>();
+        SQLiteDatabase db = myDatabaseHelper.getReadableDatabase();
+
+        // Assuming the table "dashboard" has columns "id", "name", "image", and "price"
+        Cursor cursor = db.rawQuery("SELECT * FROM dashboard", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Product product = new Product();
+                int idIndex = cursor.getColumnIndex("id");
+                int nameIndex = cursor.getColumnIndex("name");
+                int imageIndex = cursor.getColumnIndex("image");
+
+
+                if (idIndex != -1) product.setId(cursor.getInt(idIndex));
+                if (nameIndex != -1) product.setName(cursor.getString(nameIndex));
+                if (imageIndex != -1) product.setImage(cursor.getString(imageIndex));
+
+                productList.add(product);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return productList;
+    }
+
+
 
     private boolean isConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

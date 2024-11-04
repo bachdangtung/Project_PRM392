@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
+import com.example.gearapp.validate.RegisterValidate;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -52,11 +53,19 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if(user.equals("")||pass.equals("")||repass.equals("")||email.equals("")||phone.equals(""))
                     Toast.makeText(RegisterActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
-                else{
+                else if (!RegisterValidate.validateUsername(user)) {
+                    Toast.makeText(RegisterActivity.this, "Tên đăng nhập không hợp lệ", Toast.LENGTH_SHORT).show();
+                }else if (!RegisterValidate.validatePassword(pass)) {
+                    Toast.makeText(RegisterActivity.this, "Mật khẩu không hợp lệ", Toast.LENGTH_SHORT).show();
+                }else if (!RegisterValidate.validateEmail(email)) {
+                    Toast.makeText(RegisterActivity.this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+                }else if (!RegisterValidate.validatePhone(phone)) {
+                    Toast.makeText(RegisterActivity.this, "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
+                }else{
                     if(pass.equals(repass)){
-                        Boolean checkuser = DB.checkusername(user);
-                        if(checkuser==false){
-                            Boolean insert = DB.addUser(user, pass, email, phone);
+                        Boolean checkEmail = DB.checkEmail(email);
+                        if(checkEmail==false){
+                            Boolean insert = DB.addUser(email, user, pass, phone);
                             if(insert==true){
                                 Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
@@ -66,12 +75,13 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         }
                         else{
-                            Toast.makeText(RegisterActivity.this, "User already exists! please sign in", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Email already exists! Please use a different email.", Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         Toast.makeText(RegisterActivity.this, "Passwords not matching", Toast.LENGTH_SHORT).show();
                     }
-                } }
+                }
+            }
         });
 
         loginText.setOnClickListener(new View.OnClickListener() {

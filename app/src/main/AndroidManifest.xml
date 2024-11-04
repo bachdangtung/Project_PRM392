@@ -16,7 +16,10 @@
         android:theme="@style/Theme.GearApp"
         tools:targetApi="31">
         <activity
-            android:name=".activity.OrderDetailActivity"
+            android:name=".activity.UserProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AdminDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".activity.AddCategoryActivity"
@@ -29,7 +32,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.ProductDetailActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.UserOrderActivity"
             android:exported="true">
@@ -46,8 +49,14 @@
             android:name=".activity.ProductManagementActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.ThanhToanActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.MainActivity"
             android:exported="true" />
+        <activity android:name=".activity.CartActivity"></activity>
+
+
     </application>
 
 </manifest>
