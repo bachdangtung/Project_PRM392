@@ -30,14 +30,5 @@ public class RegisterValidate {
         return password != null && password.equals(repassword);
     }
 
-    // Phương thức này có thể dùng để kiểm tra tất cả các điều kiện tại màn đăng ký
-    public static boolean validateRegister(String username, String email, String password, String confirmPassword) {
-        return validateUsername(username) && validateEmail(email)
-                && validatePassword(password) && validateConfirmPassword(password, confirmPassword);
-    }
 
-    // Phương thức validate đơn giản cho màn đăng nhập
-    public static boolean validateLogin(String username, String password) {
-        return validateUsername(username) && validatePassword(password);
-    }
 }

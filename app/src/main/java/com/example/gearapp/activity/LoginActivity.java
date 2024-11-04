@@ -23,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView registerText;
     Button btnlogin;
     MyDatabaseHelper DB;
+    private static final String ADMIN_USER  = "Admin";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +47,18 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     Boolean checkuserpass = DB.checkusernamepassword(user, pass);
                     if(checkuserpass==true){
-                        Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
-                        Intent intent  = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
+                        // So sánh email đăng nhập với email admin cố định
+                        if (user.equals(ADMIN_USER)) {
+                            // Nếu là admin, chuyển đến AdminDashboard
+                            Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // Nếu là user, chuyển đến HomeActivity
+                            Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
                     }else{
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     }
