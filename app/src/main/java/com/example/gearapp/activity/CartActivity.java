@@ -29,16 +29,13 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        // Find the views
         toolbarCart = findViewById(R.id.toolbarCart);
         cartItemsLayout = findViewById(R.id.cartItemsLayout);
         txtTotalPrice = findViewById(R.id.txtTotalPrice);
         btnCheckout = findViewById(R.id.btnCheckout);
 
-        // Update UI to display products
         updateCartUI();
 
-        // Set click listener for the "Thanh toán" button
         btnCheckout.setOnClickListener(v -> {
             double totalPrice = calculateTotalPrice(); // Calculate the total price
             Intent intent = new Intent(CartActivity.this, ThanhToanActivity.class);
@@ -56,25 +53,24 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void updateCartUI() {
-        cartItemsLayout.removeAllViews(); // Clear existing views
+        cartItemsLayout.removeAllViews();
 
-        // Iterate through the product list from CartManager
         for (Product product : CartManager.getInstance().getProducts()) {
-            // Inflate a new view for the product
+            int quantity = CartManager.getInstance().getProductQuantity(product); // Get product quantity
+
             View productView = LayoutInflater.from(this).inflate(R.layout.product_cart_item, null);
             ImageView imgCartProduct = productView.findViewById(R.id.imgCartProduct);
             TextView txtCartProductName = productView.findViewById(R.id.txtCartProductName);
             TextView txtCartProductPrice = productView.findViewById(R.id.txtCartProductPrice);
             Button btnDeleteProduct = productView.findViewById(R.id.btnDeleteProduct);
 
-            // Set product data
             txtCartProductName.setText(product.getName());
-            txtCartProductPrice.setText(String.format("Price: $%.2f", product.getPrice()));
 
-            // Load product image using Glide
+            double totalPriceForItem = product.getPrice();
+            txtCartProductPrice.setText(String.format("Price: $%.2f", totalPriceForItem));
+
             Glide.with(this).load(product.getImage()).into(imgCartProduct);
 
-            // Set click listener for the delete button
             btnDeleteProduct.setOnClickListener(v -> {
                 CartManager.getInstance().removeProduct(product);
                 updateCartUI();
@@ -84,7 +80,8 @@ public class CartActivity extends AppCompatActivity {
             cartItemsLayout.addView(productView);
         }
 
-        // Update total price
         txtTotalPrice.setText(String.format("Total: $%.2f", calculateTotalPrice()));
     }
+
+
 }

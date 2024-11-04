@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -51,11 +52,20 @@ public class MainActivity extends AppCompatActivity {
     List<NewProduct> newarrayProduct;
     NewProductAdapter spAdapter;
     MyDatabaseHelper myDatabaseHelper;
+    private ImageView profileImageView; // Tham chiếu đến ImageView
+    private TextView profileTextView; // Tham chiếu đến TextView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) this).setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        final String email = intent.getStringExtra("email");
+        final String phone = intent.getStringExtra("phone");
+
+        profileImageView = findViewById(R.id.profileImageView); // Lấy ID của ImageView
+        profileTextView = findViewById(R.id.userNameTextView); // Lấy ID của TextView
         myDatabaseHelper = new MyDatabaseHelper(this);
         Anhxa();
         ActionBar();
@@ -69,6 +79,29 @@ public class MainActivity extends AppCompatActivity {
             getEventClick();
         } else {
             Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
+        }
+
+        // Thiết lập sự kiện nhấn cho hình ảnh hồ sơ
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Chuyển đến UserProfileActivity
+                Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+                String email = getIntent().getStringExtra("email"); // Nhận email từ Intent
+                String username = getIntent().getStringExtra("username");
+                String phone = getIntent().getStringExtra("phone");
+                intent.putExtra("email", email);
+                intent.putExtra("username", username);
+                intent.putExtra("phone", phone);
+                startActivity(intent);
+            }
+        });
+
+        // Nhận username từ Intent
+        String username = intent.getStringExtra("username");
+
+        if (username != null) {
+            profileTextView.setText(username); // Hiển thị tên người dùng
         }
     }
 

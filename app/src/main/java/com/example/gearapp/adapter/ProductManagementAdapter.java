@@ -1,6 +1,7 @@
 package com.example.gearapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gearapp.R;
+import com.example.gearapp.activity.UpdateProductActivity;
 import com.example.gearapp.model.Product;
 
 import java.util.List;
@@ -39,6 +41,11 @@ public class ProductManagementAdapter extends RecyclerView.Adapter<ProductManage
         holder.productPrice.setText(String.valueOf(product.getPrice()));
         holder.productCategory.setText(product.getCategory().getName());
         holder.productImage.setImageResource(R.drawable.baseline_image_24);
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, UpdateProductActivity.class);
+            intent.putExtra("productId", product.getId()); // Truyền ID sản phẩm
+            context.startActivity(intent);
+        });
     }
 
     @Override
