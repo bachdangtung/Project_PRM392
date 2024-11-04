@@ -157,6 +157,58 @@ public class MainActivity extends AppCompatActivity {
         listViewManHinhChinh.setAdapter(categoryAdapter);
     }
 
+    private void getNewProduct() {
+        newarrayProduct = getAllProducts(); // Use your existing getAllProducts method
+
+        if (!newarrayProduct.isEmpty()) {
+            spAdapter = new NewProductAdapter(newarrayProduct, getApplicationContext());
+            recyclerViewManHinhChinh.setAdapter(spAdapter);
+        } else {
+            Toast.makeText(getApplicationContext(), "No new products found", Toast.LENGTH_SHORT).show();
+        }
+
+        Log.d("NewProductCount", "Number of new products: " + newarrayProduct.size());
+    }
+
+
+    private void getCategory() {
+        mangloaisp = getAllCategories(); // Fetch categories directly in MainActivity
+
+        if (!mangloaisp.isEmpty()) {
+            categoryAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(getApplicationContext(), "No categories found", Toast.LENGTH_LONG).show();
+        }
+
+        Log.d("CategoryCount", "Number of categories: " + mangloaisp.size());
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        SQLiteDatabase db = myDatabaseHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM category", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Category category = new Category();
+                int idIndex = cursor.getColumnIndex("id");
+                int nameIndex = cursor.getColumnIndex("name");
+                int imageIndex = cursor.getColumnIndex("image");
+
+                if (idIndex != -1) category.setId(cursor.getInt(idIndex));
+                if (nameIndex != -1) category.setName(cursor.getString(nameIndex));
+                if (imageIndex != -1) category.setImage(cursor.getString(imageIndex));
+
+                categories.add(category);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return categories;
+    }
+
+
+
     private boolean isConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);

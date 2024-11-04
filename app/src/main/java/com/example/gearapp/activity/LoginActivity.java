@@ -10,6 +10,15 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gearapp.R;
+<<<<<<< Updated upstream
+=======
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
+
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+>>>>>>> Stashed changes
 
 public class LoginActivity extends AppCompatActivity {
     EditText editEmailAddressLog, editPasswordLog;
