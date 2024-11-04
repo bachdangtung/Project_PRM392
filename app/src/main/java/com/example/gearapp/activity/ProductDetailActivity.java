@@ -1,57 +1,45 @@
 package com.example.gearapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.widget.Toolbar;
 
-import com.example.gearapp.MyDatabaseHelper;
+import com.bumptech.glide.Glide;
 import com.example.gearapp.R;
-import com.example.gearapp.model.Product;
 
 public class ProductDetailActivity extends AppCompatActivity {
-
-    private TextView productName, price, description;
-    private Button btnAddtoCart;
-    private ImageView imgProductDetail;
-    private Spinner spinner;
-    private Toolbar toolbar;
-    private MyDatabaseHelper myDatabaseHelper;
+    Toolbar toolbar;
+    ImageView imgProductDetail;
+    TextView txtProductName, txtPrice, txtProductDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_detail);
-        productName = findViewById(R.id.txtproductname);
-        price = findViewById(R.id.txtprice);
-        description = findViewById(R.id.txtproductdescription);
-        btnAddtoCart = findViewById(R.id.btnaddtocart);
-        spinner = findViewById(R.id.spinner);
+        //setContentView(R.layout.activity_product_detail);
+        ((AppCompatActivity) this).setContentView(R.layout.activity_product_detail);
+
+        // Find the views
+        txtProductName = findViewById(R.id.txtproductname);
+        txtPrice = findViewById(R.id.txtprice);
         imgProductDetail = findViewById(R.id.imgproductdetail);
-        toolbar = findViewById(R.id.toolbarProductDetail);
+        txtProductDescription = findViewById(R.id.txtproductdescription);
 
-        int productId = getIntent().getIntExtra("productId", -1);
+        // Retrieve data from the Intent
+        Intent intent = getIntent();
+        String productName = intent.getStringExtra("productName");
+        String productPrice = intent.getStringExtra("productPrice");
+        String productImage = intent.getStringExtra("productImage");
+        String productDescription = intent.getStringExtra("productDescription");
 
-        myDatabaseHelper = new MyDatabaseHelper(this);
-        Product product = myDatabaseHelper.getProductById(productId);
-        if (product != null) {
-            productName.setText(product.getName());
-            price.setText(String.valueOf(product.getPrice()));
-
-        }
+        // Set the data to the views
+        txtProductName.setText(productName);
+        txtPrice.setText("Price: " + productPrice + "Đ");
+        Glide.with(this).load(productImage).into(imgProductDetail);
+        txtProductDescription.setText(productDescription);
     }
+
 }
-
-
-
-
-
-

@@ -8,6 +8,15 @@ public class NewProduct {
     String description;
     int category_id;
 
+    public NewProduct() {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+        this.description = description;
+        this.category_id = category_id;
+    }
+
     public int getId() {
         return id;
     }
