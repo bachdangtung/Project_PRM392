@@ -10,7 +10,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.gearapp.model.Category;
+import com.example.gearapp.model.NewProduct;
 import com.example.gearapp.model.Product;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
@@ -48,7 +52,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_NAME = "name";
     private static final String COLUMN_USER_PASSWORD = "password";
     private static final String COLUMN_USER_PHONENUMBER = "phonenumber";
-    private static final String COLUMN_USER_STATUS = "status";
+    //private static final String COLUMN_USER_STATUS = "status";
 
     //table order
     private static final String TABLE_ORDER = "order";
@@ -132,8 +136,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_EMAIL + " TEXT, " +
                 COLUMN_USER_NAME + " TEXT, " +
                 COLUMN_USER_PASSWORD + " TEXT, " +
-                COLUMN_USER_PHONENUMBER + " TEXT, " +
-                COLUMN_USER_STATUS + " TEXT);";
+                COLUMN_USER_PHONENUMBER + " TEXT); ";
+                //COLUMN_USER_STATUS + " TEXT);";
         db.execSQL(createUserTable);
 
         //tao bang order
@@ -288,7 +292,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Thêm người dùng vào bảng user
-    public void addUser(String email, String name, String password, String phonenumber, String status) {
+    public Boolean addUser(String email, String name, String password, String phonenumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -296,13 +300,34 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_USER_NAME, name);
         cv.put(COLUMN_USER_PASSWORD, password);
         cv.put(COLUMN_USER_PHONENUMBER, phonenumber);
-        cv.put(COLUMN_USER_STATUS, status);
+
         long result = db.insert(TABLE_USER, null, cv);
         if (result == -1) {
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
+            return true;
         }
+    }
+
+
+    public Boolean checkusername(String name) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from user where name = ?", new String[]{name});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    public Boolean checkusernamepassword(String name, String password){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from user where name = ? and password = ?", new String[] {name,password});
+        if(cursor.getCount()>0)
+            return true;
+        else
+            return false;
     }
 
     // Thêm đơn hàng vào bảng order
@@ -392,4 +417,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+
 }
