@@ -23,7 +23,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.AddProductActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activity.CategoryManagementActivity"
             android:exported="false" />
@@ -32,12 +32,6 @@
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.ProductManagementActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,6 +39,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ProductManagementActivity"
+            android:exported="false"/>
+
         <activity
             android:name=".activity.ThanhToanActivity"
             android:exported="false" />
