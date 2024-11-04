@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.gearapp.MyDatabaseHelper;
 import com.example.gearapp.R;
-import com.example.gearapp.utils.Utils;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
