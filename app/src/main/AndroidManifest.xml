@@ -57,6 +57,7 @@
         <activity
             android:name=".activity.ProductManagementActivity"
             android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activity.ThanhToanActivity"
             android:exported="false" />
