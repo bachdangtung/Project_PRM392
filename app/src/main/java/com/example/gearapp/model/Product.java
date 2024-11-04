@@ -4,10 +4,15 @@ public class Product {
     private int id;
     private String name;
     private String image;
-    private double price;
-    private String description;
+    String price;
     Category category;
     int category_id;
+
+    public Product(int category_id, Category category, String price) {
+        this.category_id = category_id;
+        this.category = category;
+        this.price = price;
+    }
 
     public int getCategory_id() {
         return category_id;
@@ -17,36 +22,12 @@ public class Product {
         this.category_id = category_id;
     }
 
-    public Product(int category_id) {
-        this.category_id = category_id;
+    public String getPrice() {
+        return price;
     }
 
-    public Product() {
-    }
-
-    public Product(int id, Category category, String description, double price, String image, String name) {
-        this.id = id;
-        this.category = category;
-        this.description = description;
+    public void setPrice(String price) {
         this.price = price;
-        this.image = image;
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Category getCategory() {
@@ -57,26 +38,30 @@ public class Product {
         this.category = category;
     }
 
-    public double getPrice() {
-        return price;
+    public Product() {
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public Product(int id, Category category, String description, double price, String image, String name) {
+        this.id = id;
+        this.image = image;
+        this.name = name;
     }
 
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getImage() {
         return image;
     }
-
     public void setImage(String image) {
         this.image = image;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
