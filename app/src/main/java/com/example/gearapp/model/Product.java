@@ -4,11 +4,20 @@ public class Product {
     private int id;
     private String name;
     private String image;
-    String price;
+    private double price;
     Category category;
     int category_id;
+    private  String description;
 
-    public Product(int category_id, Category category, String price) {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Product(int category_id, Category category, double price) {
         this.category_id = category_id;
         this.category = category;
         this.price = price;
@@ -22,11 +31,11 @@ public class Product {
         this.category_id = category_id;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
