@@ -8,29 +8,25 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.bumptech.glide.Glide;
 import com.example.gearapp.R;
-import com.example.gearapp.model.Category;
+import com.example.gearapp.model.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryAdapter extends BaseAdapter {
+public class ProductAdapter extends BaseAdapter {
 
-    List<Category> array;
+    List<Product> array;
     Context context;
 
-
-    public CategoryAdapter(Context context, List<Category> array) {
+    public ProductAdapter(List<Product> array, Context context) {
         this.array = array;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return array.size();
+        return 0;
     }
 
     @Override
@@ -42,6 +38,7 @@ public class CategoryAdapter extends BaseAdapter {
     public long getItemId(int i) {
         return 0;
     }
+
 
     public class ViewHolder{
         TextView text_nameproduct;
@@ -65,5 +62,4 @@ public class CategoryAdapter extends BaseAdapter {
         }
         return view;
     }
-
 }

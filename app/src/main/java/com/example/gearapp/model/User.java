@@ -7,14 +7,11 @@ public class User {
     private String name;
     private String password;
     private String phonenumber;
-    private String status;
-
     public User() {
     }
 
-    public User(int id, String status, String phonenumber, String password, String name, String email) {
+    public User(int id, String phonenumber, String password, String name, String email) {
         this.id = id;
-        this.status = status;
         this.phonenumber = phonenumber;
         this.password = password;
         this.name = name;
@@ -64,11 +61,5 @@ public class User {
         this.phonenumber = mobile;
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }
