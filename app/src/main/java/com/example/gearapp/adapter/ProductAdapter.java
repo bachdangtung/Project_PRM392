@@ -26,17 +26,17 @@ public class ProductAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return array.size();
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public Object getItem(int position) {
+        return array.get(position);
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public long getItemId(int position) {
+        return position;
     }
 
 
@@ -47,7 +47,7 @@ public class ProductAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder =  null;
+        ViewHolder viewHolder;
         if (view == null) {
             viewHolder = new ViewHolder();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -55,11 +55,16 @@ public class ProductAdapter extends BaseAdapter {
             viewHolder.text_nameproduct = view.findViewById(R.id.item_nameproduct);
             viewHolder.imgimage = view.findViewById(R.id.item_image);
             view.setTag(viewHolder);
-        }else  {
+        } else {
             viewHolder = (ViewHolder) view.getTag();
-            viewHolder.text_nameproduct.setText(array.get(i).getName());
-            Glide.with(context).load(array.get(i).getImage()).into(viewHolder.imgimage);
         }
+
+        // Set the product name and image using the data from the dashboard table
+        Product product = array.get(i);
+        viewHolder.text_nameproduct.setText(product.getName());
+        Glide.with(context).load(product.getImage()).into(viewHolder.imgimage);
+
         return view;
     }
+
 }
