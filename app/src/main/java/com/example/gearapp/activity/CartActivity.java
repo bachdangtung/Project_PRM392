@@ -2,55 +2,89 @@ package com.example.gearapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.gearapp.R;
+import com.example.gearapp.model.Product;
+import com.example.gearapp.model.CartManager;
 
 public class CartActivity extends AppCompatActivity {
-
-    private ImageView productImage;
-    private TextView productName, productPrice;
-    private Button btnPayment, btnDelete;
+    Toolbar toolbarCart;
+    LinearLayout cartItemsLayout;
+    TextView txtTotalPrice;
+    Button btnCheckout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        // Initialize views
-        productImage = findViewById(R.id.cart_product_image);
-        productName = findViewById(R.id.cart_product_name);
-        productPrice = findViewById(R.id.cart_product_price);
-        btnPayment = findViewById(R.id.btn_payment);
-        btnDelete = findViewById(R.id.btn_delete);
+        // Find the views
+        toolbarCart = findViewById(R.id.toolbarCart);
+        cartItemsLayout = findViewById(R.id.cartItemsLayout);
+        txtTotalPrice = findViewById(R.id.txtTotalPrice);
+        btnCheckout = findViewById(R.id.btnCheckout);
 
-        // Retrieve product details from intent
-        String name = getIntent().getStringExtra("productName");
-        String price = getIntent().getStringExtra("productPrice");
-        String imageUrl = getIntent().getStringExtra("productImage");
+        // Update UI to display products
+        updateCartUI();
 
-        // Set product details
-        productName.setText(name);
-        productPrice.setText("Price: " + price + "Đ");
-        Glide.with(this).load(imageUrl).into(productImage);
-
-        // Set delete button listener
-        btnDelete.setOnClickListener(v -> {
-            // Clear product details and display message
-            Toast.makeText(CartActivity.this, "Product removed from cart", Toast.LENGTH_SHORT).show();
-            finish();
+        // Set click listener for the "Thanh toán" button
+        btnCheckout.setOnClickListener(v -> {
+            double totalPrice = calculateTotalPrice(); // Calculate the total price
+            Intent intent = new Intent(CartActivity.this, ThanhToanActivity.class);
+            intent.putExtra("TOTAL_PRICE", totalPrice); // Pass total price to ThanhToanActivity
+            startActivity(intent); // Start ThanhToanActivity
         });
+    }
 
-        // Set payment button listener
-        btnPayment.setOnClickListener(v -> {
-            // Implement payment logic here
-            Toast.makeText(CartActivity.this, "Proceeding to payment", Toast.LENGTH_SHORT).show();
-        });
+    private double calculateTotalPrice() {
+        double totalPrice = 0;
+        for (Product product : CartManager.getInstance().getProducts()) {
+            totalPrice += product.getPrice();
+        }
+        return totalPrice;
+    }
+
+    private void updateCartUI() {
+        cartItemsLayout.removeAllViews(); // Clear existing views
+
+        // Iterate through the product list from CartManager
+        for (Product product : CartManager.getInstance().getProducts()) {
+            // Inflate a new view for the product
+            View productView = LayoutInflater.from(this).inflate(R.layout.product_cart_item, null);
+            ImageView imgCartProduct = productView.findViewById(R.id.imgCartProduct);
+            TextView txtCartProductName = productView.findViewById(R.id.txtCartProductName);
+            TextView txtCartProductPrice = productView.findViewById(R.id.txtCartProductPrice);
+            Button btnDeleteProduct = productView.findViewById(R.id.btnDeleteProduct);
+
+            // Set product data
+            txtCartProductName.setText(product.getName());
+            txtCartProductPrice.setText(String.format("Price: $%.2f", product.getPrice()));
+
+            // Load product image using Glide
+            Glide.with(this).load(product.getImage()).into(imgCartProduct);
+
+            // Set click listener for the delete button
+            btnDeleteProduct.setOnClickListener(v -> {
+                CartManager.getInstance().removeProduct(product);
+                updateCartUI();
+                Toast.makeText(CartActivity.this, "Sản phẩm đã được xóa", Toast.LENGTH_SHORT).show();
+            });
+
+            cartItemsLayout.addView(productView);
+        }
+
+        // Update total price
+        txtTotalPrice.setText(String.format("Total: $%.2f", calculateTotalPrice()));
     }
 }

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.gearapp.R;
-import com.example.gearapp.activity.CartActivity;
 import com.example.gearapp.activity.ProductDetailActivity;
 import com.example.gearapp.model.NewProduct;
 
