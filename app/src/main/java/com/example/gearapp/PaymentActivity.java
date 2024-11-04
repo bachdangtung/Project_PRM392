@@ -1,4 +1,4 @@
-package com.example.gearapp.activity;
+package com.example.gearapp;
 
 import android.os.Bundle;
 
@@ -8,13 +8,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-<<<<<<<< HEAD:app/src/main/java/com/example/gearapp/PaymentActivity.java
 public class PaymentActivity extends AppCompatActivity {
-========
-import com.example.gearapp.R;
-
-public class ThanhToanActivity extends AppCompatActivity {
->>>>>>>> main:app/src/main/java/com/example/gearapp/activity/ThanhToanActivity.java
+    /*
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,4 +22,6 @@ public class ThanhToanActivity extends AppCompatActivity {
             return insets;
         });
     }
+    */
+
 }

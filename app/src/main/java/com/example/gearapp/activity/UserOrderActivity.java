@@ -9,20 +9,23 @@ import static com.example.gearapp.MyDatabaseHelper.COLUMN_ORDER_QUANTITY;
 import static com.example.gearapp.MyDatabaseHelper.COLUMN_ORDER_STATUS;
 import static com.example.gearapp.MyDatabaseHelper.COLUMN_ORDER_TOTALMONEY;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gearapp.MyDatabaseHelper;
+import com.example.gearapp.activity.OrderDetailActivity;
 import com.example.gearapp.R;
 import com.example.gearapp.adapter.OrderAdapter;
 import com.example.gearapp.model.Order;
@@ -30,11 +33,11 @@ import com.example.gearapp.model.User;
 
 import java.util.ArrayList;
 
-public class UserOrderActivity extends AppCompatActivity {
+public class UserOrderActivity extends AppCompatActivity implements OrderAdapter.OnOrderClickListener {
     private MyDatabaseHelper dbHelper;
     private RecyclerView recyclerView;
     private ArrayList<Order> orderList;
-    private OrderAdapter orderAdapter; // Đảm bảo bạn có một adapter riêng cho RecyclerView
+    private OrderAdapter orderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +49,24 @@ public class UserOrderActivity extends AppCompatActivity {
         orderList = new ArrayList<>();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        orderAdapter = new OrderAdapter(this, orderList);
+        orderAdapter = new OrderAdapter(orderList, this);
         recyclerView.setAdapter(orderAdapter);
 
-        int userId = 2;
-        //getIntent().getIntExtra("user_id", -1);
+        // Thêm khoảng cách giữa các item
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.bottom = 50; // 50px khoảng cách giữa các item
+            }
+        });
+
+        // Thêm đường kẻ đen
+        DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        ColorDrawable colorDrawable = new ColorDrawable(Color.BLACK);
+        divider.setDrawable(colorDrawable);
+        recyclerView.addItemDecoration(divider);
+
+        int userId = 2;  // Thay đổi ID người dùng phù hợp
         if (userId == -1) {
             Toast.makeText(this, "ID người dùng không hợp lệ", Toast.LENGTH_SHORT).show();
             finish();
@@ -66,20 +82,20 @@ public class UserOrderActivity extends AppCompatActivity {
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    Order order = new Order(
-                            cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ID)),
-                            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ADDRESS)),
-                            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PHONE)),
-                            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_EMAIL)),
-                            cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_QUANTITY)),
-                            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TOTALMONEY)),
-                            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_STATUS)),
-                            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_DATEORDER)),
-                            new User(userId) // Giả sử lớp User có constructor nhận userId
-                    );
+                    int orderId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ID));
+                    String address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ADDRESS));
+                    String phone = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PHONE));
+                    String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_EMAIL));
+                    int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_QUANTITY));
+                    String totalMoney = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TOTALMONEY));
+                    String status = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_STATUS));
+                    String dateOrder = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_DATEORDER));
 
+                    Order order = new Order(orderId, address, phone, email, quantity, totalMoney, status, dateOrder, new User(userId));
                     orderList.add(order);
                 } while (cursor.moveToNext());
+            } else {
+                Toast.makeText(this, "Không tìm thấy đơn hàng", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Log.e("UserOrderActivity", "Lỗi khi tải đơn hàng: " + e.getMessage());
@@ -93,6 +109,11 @@ public class UserOrderActivity extends AppCompatActivity {
         orderAdapter.notifyDataSetChanged();
     }
 
-
+    @Override
+    public void onOrderClick(int orderId) {
+        // Chuyển sang màn hình chi tiết đơn hàng
+        Intent intent = new Intent(this, OrderDetailActivity.class);
+        intent.putExtra("order_id", orderId);
+        startActivity(intent);
+    }
 }
-

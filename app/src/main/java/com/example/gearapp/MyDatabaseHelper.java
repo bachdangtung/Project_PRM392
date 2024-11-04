@@ -440,4 +440,30 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getOrderDetails(int orderId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Truy vấn để lấy chi tiết đơn hàng và tên sản phẩm
+        String query = "SELECT orderdetail.id, orderdetail.quantity, orderdetail.price, product.name AS product_name," +
+                "product.image AS product_image " +
+                "FROM orderdetail " +
+                "JOIN product ON orderdetail.product_id = product.id " +
+                "WHERE orderdetail.order_id = ?";
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(orderId)});
+            if (cursor != null && cursor.getCount() == 0) {
+                Toast.makeText(context, "Không tìm thấy chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        return cursor;
+    }
+
+
+
+
 }
