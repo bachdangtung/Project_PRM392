@@ -370,6 +370,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             return false;
     }
 
+    // Hàm lấy email và phone từ cơ sở dữ liệu
+    public Cursor getUserData(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT email, phonenumber FROM user WHERE name=?";
+        Cursor cursor = db.rawQuery(query, new String[]{username});
+        return cursor;
+    }
+
     // Thêm vào trong lớp DB
     public Boolean checkEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
