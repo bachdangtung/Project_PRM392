@@ -44,7 +44,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.CategoryManagementActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activity.ProductDetailActivity"
             android:exported="true" />
