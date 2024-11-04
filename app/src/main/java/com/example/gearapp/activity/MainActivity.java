@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(Home);
                         break;
                     case 1:
-                        //Intent Profile = new Intent(getApplicationContext(), ProfileActivity.class);
-                        //startActivity(Profile);
+                        Intent Profile = new Intent(getApplicationContext(), UserProfileActivity.class);
+                        startActivity(Profile);
                         break;
                     case 2:
                         Intent Cart = new Intent(getApplicationContext(), CartActivity.class);
