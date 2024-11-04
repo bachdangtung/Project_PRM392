@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadDataFromDatabase() {
         newarrayProduct = getAllProducts();
         if (!newarrayProduct.isEmpty()) {
-            spAdapter = new NewProductAdapter(newarrayProduct, getApplicationContext());
+            spAdapter = new NewProductAdapter(newarrayProduct, this);
             recyclerViewManHinhChinh.setAdapter(spAdapter);
         } else {
             Toast.makeText(this, "No products found", Toast.LENGTH_SHORT).show();
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         newarrayProduct = getAllProducts(); // Use your existing getAllProducts method
 
         if (!newarrayProduct.isEmpty()) {
-            spAdapter = new NewProductAdapter(newarrayProduct, getApplicationContext());
+            spAdapter = new NewProductAdapter(newarrayProduct, this);
             recyclerViewManHinhChinh.setAdapter(spAdapter);
         } else {
             Toast.makeText(getApplicationContext(), "No new products found", Toast.LENGTH_SHORT).show();
