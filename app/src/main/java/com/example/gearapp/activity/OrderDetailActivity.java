@@ -61,7 +61,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                     String productName = cursor.getString(cursor.getColumnIndexOrThrow("product_name"));
                     String productImage = cursor.getString(cursor.getColumnIndexOrThrow("product_image"));
 
-                    // Tạo đối tượng Product để lưu tên sản phẩm
                     Product product = new Product();
                     product.setName(productName);
                     product.setImage(productImage);

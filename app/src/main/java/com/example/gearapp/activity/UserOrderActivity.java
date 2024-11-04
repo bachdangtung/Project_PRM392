@@ -60,13 +60,14 @@ public class UserOrderActivity extends AppCompatActivity implements OrderAdapter
             }
         });
 
-        // Thêm đường kẻ đen
+        // Thêm đường kẻ đen giữa các item với nhau 
         DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         ColorDrawable colorDrawable = new ColorDrawable(Color.BLACK);
         divider.setDrawable(colorDrawable);
         recyclerView.addItemDecoration(divider);
 
-        int userId = 2;  // Thay đổi ID người dùng phù hợp
+        Intent intent = getIntent();
+        int userId = intent.getIntExtra("user_id", -1);  // Thay đổi ID người dùng phù hợp
         if (userId == -1) {
             Toast.makeText(this, "ID người dùng không hợp lệ", Toast.LENGTH_SHORT).show();
             finish();

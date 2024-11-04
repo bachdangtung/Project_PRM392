@@ -42,7 +42,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
                 .into(holder.tvProductImage); // ImageView để hiển thị ảnh
         holder.tvProductImage.getLayoutParams().width = 500; // đặt chiều rộng
         holder.tvProductImage.getLayoutParams().height = 500; // đặt chiều cao
-        holder.tvProductImage.requestLayout(); // yêu cầu cập nhật giao diện
+        holder.tvProductImage.requestLayout(); // yêu cầu để cập nhật giao diện
     }
 
     @Override
