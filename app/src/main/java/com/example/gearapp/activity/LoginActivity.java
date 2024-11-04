@@ -23,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView registerText;
     Button btnlogin;
     MyDatabaseHelper DB;
+    private static final String ADMIN_USER  = "admin";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +34,12 @@ public class LoginActivity extends AppCompatActivity {
         btnlogin = (Button) findViewById(R.id.btnsignin1);
         registerText = findViewById(R.id.registerText);
         DB = new MyDatabaseHelper(this);
+
+        // Nhận dữ liệu từ RegisterActivity
+        Intent registerIntent = getIntent();
+
+        final String emailFromRegister = registerIntent.getStringExtra("email");
+        final String phoneFromRegister = registerIntent.getStringExtra("phone");
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,9 +53,24 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     Boolean checkuserpass = DB.checkusernamepassword(user, pass);
                     if(checkuserpass==true){
-                        Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
-                        Intent intent  = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
+                        // So sánh email đăng nhập với email admin cố định
+                        if (user.equals(ADMIN_USER)) {
+                            // Nếu là admin, chuyển đến AdminDashboard
+                            Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                            intent.putExtra("username", user);
+                            intent.putExtra("email", emailFromRegister);
+                            intent.putExtra("phone", phoneFromRegister);
+                            startActivity(intent);
+                        } else {
+                            // Nếu là user, chuyển đến HomeActivity
+                            Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("username", user);
+                            intent.putExtra("email", emailFromRegister);
+                            intent.putExtra("phone", phoneFromRegister);
+                            startActivity(intent);
+                        }
                     }else{
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     }

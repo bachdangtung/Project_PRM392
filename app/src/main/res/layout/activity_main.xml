@@ -15,13 +15,46 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarmanhinhchinh"
                 app:title="Trang chính"
                 android:background="#ff00dfff"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:layout_gravity="end"
+                android:id="@+id/userProfile"
+                >
+
+            <!-- ImageView cho hình ảnh hồ sơ -->
+                <ImageView
+                    android:id="@+id/profileImageView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/baseline_account_circle_24"
+                    android:contentDescription=""
+                    android:src="@drawable/ic_name" />
+
+            <!-- TextView cho tên người dùng -->
+                <TextView
+                    android:id="@+id/userNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="username"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/black"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+            />
+            </LinearLayout>
+
             </androidx.appcompat.widget.Toolbar>
+
             <ViewFlipper
                 android:id="@+id/viewflipper"
                 android:layout_width="match_parent"
@@ -32,6 +65,9 @@
                 android:background="#5992d2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <!-- ImageView cho profile -->
+
                 <TextView
                     android:textSize="20sp"
                     android:layout_marginLeft="10dp"
@@ -53,9 +89,6 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
-
-
-
             </LinearLayout>
         </LinearLayout>
         <com.google.android.material.navigation.NavigationView
@@ -64,13 +97,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ListView
+                android:layout_marginTop="10dp"
                 android:id="@+id/listviewmanhinhchinh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

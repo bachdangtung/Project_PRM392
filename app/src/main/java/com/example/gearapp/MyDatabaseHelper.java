@@ -20,6 +20,11 @@ import java.util.List;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
+    // Table dashboard
+    private static final String TABLE_DASHBOARD = "dashboard" ;
+    private static final String COLUMN_DASHBOARD_NAME = "name";
+    private static final String COLUMN_DASHBOARD_IMAGE = "image";
+
     private Context context;
     private static final String DATABASE_NAME = "GearApp.db";
     private static final int DATABASE_VERSION = 1;
@@ -95,7 +100,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_MESSAGE_SUCCESS = "success";
     private static final String COLUMN_MESSAGE_MESSAGE = "message";
     private static final String COLUMN_MESSAGE_NAME = "name";
-
+    private String COLUMN_Dashboard_ID;
 
 
     public MyDatabaseHelper(@Nullable Context context) {
@@ -189,6 +194,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_MESSAGE_MESSAGE + " TEXT, " +
                 COLUMN_MESSAGE_NAME + " TEXT);";
         db.execSQL(createMessageTable);
+
+        //tao bang dashboard
+        String createDashboardTable = "CREATE TABLE " + TABLE_DASHBOARD + " (" +
+                COLUMN_Dashboard_ID + " INTEGER, " +
+                COLUMN_DASHBOARD_NAME + " TEXT, " +
+                COLUMN_DASHBOARD_IMAGE + " TEXT);";
+        db.execSQL(createDashboardTable);
     }
 
     @Override
@@ -437,6 +449,23 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             return true;
         else
             return false;
+    }
+
+    // Hàm lấy email và phone từ cơ sở dữ liệu
+    public Cursor getUserData(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT email, phonenumber FROM user WHERE name=?";
+        Cursor cursor = db.rawQuery(query, new String[]{username});
+        return cursor;
+    }
+
+    // Thêm vào trong lớp DB
+    public Boolean checkEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM user WHERE email = ?", new String[]{email});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 
     // Thêm đơn hàng vào bảng order
