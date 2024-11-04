@@ -20,7 +20,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.UpdateProductActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activity.StatisticsActivity"
             android:exported="false" />
@@ -56,7 +56,6 @@
             android:exported="false" />
         <activity
             android:name=".activity.ProductManagementActivity"
-            android:exported="true" />
             android:exported="false" />
         <activity
             android:name=".activity.ThanhToanActivity"
