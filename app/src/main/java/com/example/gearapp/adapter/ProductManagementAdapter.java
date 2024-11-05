@@ -34,12 +34,20 @@ public class ProductManagementAdapter extends RecyclerView.Adapter<ProductManage
         return new ProductViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.productName.setText(product.getName());
         holder.productPrice.setText(String.valueOf(product.getPrice()));
-        holder.productCategory.setText(product.getCategory().getName());
+
+        // Kiểm tra đối tượng Category có phải null không
+        if (product.getCategory() != null) {
+            holder.productCategory.setText(product.getCategory().getName());
+        } else {
+            holder.productCategory.setText("Không có danh mục");
+        }
+
         holder.productImage.setImageResource(R.drawable.baseline_image_24);
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, UpdateProductActivity.class);
@@ -47,6 +55,7 @@ public class ProductManagementAdapter extends RecyclerView.Adapter<ProductManage
             context.startActivity(intent);
         });
     }
+
 
     @Override
     public int getItemCount() {
