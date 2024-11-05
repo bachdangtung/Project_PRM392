@@ -69,6 +69,12 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".activity.UserOrderActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.OrderDetailActivity"
+            android:exported="true" />
         <activity android:name=".activity.CartActivity" />
     </application>
 

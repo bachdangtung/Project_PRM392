@@ -67,7 +67,7 @@ public class UserOrderActivity extends AppCompatActivity implements OrderAdapter
         recyclerView.addItemDecoration(divider);
 
         Intent intent = getIntent();
-        int userId = intent.getIntExtra("user_id", -1);  // Thay đổi ID người dùng phù hợp
+        int userId = 2;  // Thay đổi ID người dùng phù hợp
         if (userId == -1) {
             Toast.makeText(this, "ID người dùng không hợp lệ", Toast.LENGTH_SHORT).show();
             finish();
