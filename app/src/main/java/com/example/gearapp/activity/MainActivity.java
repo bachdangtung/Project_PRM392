@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
     List<NewProduct> newarrayProduct;
     NewProductAdapter spAdapter;
     MyDatabaseHelper myDatabaseHelper;
-    private ImageView profileImageView; // Tham chiếu đến ImageView
-    private TextView profileTextView; // Tham chiếu đến TextView
+    private ImageView profileImageView;
+    private TextView profileTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
         }
 
-        // Thiết lập sự kiện nhấn cho hình ảnh hồ sơ
         profileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Nhận username từ Intent
         String username = intent.getStringExtra("username");
 
         if (username != null) {
