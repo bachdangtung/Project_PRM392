@@ -42,7 +42,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                // Sử dụng if-else để xử lý các item được chọn
                 if (id == R.id.nav_category_management) {
                     startActivity(new Intent(AdminDashboardActivity.this, CategoryManagementActivity.class));
                 } else if (id == R.id.nav_product_management) {
@@ -52,7 +51,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 } else if (id == R.id.nav_statistics) {
                     startActivity(new Intent(AdminDashboardActivity.this, StatisticsActivity.class));
                 } else if (id == R.id.nav_logout) {
-                    // Xử lý đăng xuất ở đây
+                    startActivity(new Intent(AdminDashboardActivity.this, LoginActivity.class));
                 }
 
                 // Đóng drawer sau khi chọn item
